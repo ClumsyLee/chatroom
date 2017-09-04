@@ -1,21 +1,21 @@
-let express = require('express');
-let path = require('path');
-// let favicon = require('serve-favicon');
-let logger = require('morgan');
-let cookieParser = require('cookie-parser');
-let bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+// const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
-let session = require('express-session');
-let passport = require('passport');
-let LocalStrategy = require('passport-local').Strategy;
-let mongoose = require('mongoose');
-let crypto = require('crypto');
-var flash    = require('connect-flash');
+const session = require('express-session');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const mongoose = require('mongoose');
+const crypto = require('crypto');
+const flash = require('connect-flash');
 
-let User = require('./models/user');
-let index = require('./routes/index');
-let signup = require('./routes/signup');
-let login = require('./routes/login');
+const User = require('./models/user');
+const index = require('./routes/index');
+const signup = require('./routes/signup');
+const login = require('./routes/login');
 
 
 mongoose.connect('127.0.0.1');

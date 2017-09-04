@@ -1,7 +1,7 @@
-let express = require('express');
-let router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-let passport = require('passport');
+const passport = require('passport');
 
 /* GET login page. */
 router.get('/', (req, res, next) => {
