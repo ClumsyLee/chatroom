@@ -2,21 +2,26 @@ $(() => {
   const socket = io();
 
   $('#message-body').on('keypress', (e) => {
-    if (e.keyCode == 13) {
+    if (e.keyCode == 13 && !e.shiftKey) {
       socket.emit('message-body', $('#message-body').val());
       $('#message-body').val('');
     }
   });
 
   socket.on('message', (message) => {
+    let usernameColor = '';
+    if (message.username == $('#username').text()) {
+      usernameColor = 'text-secondary';
+    }
     const dateString = (new Date(message.createdAt)).toLocaleString('en-US');
+
     $('#messages')
-      .prepend($('<div class="list-group-item">')
+      .prepend($('<li class="list-group-item borderless py-0">')
         .append($('<div class="d-flex justify-content-between">')
-          .append($('<b>').text(message.username))
+          .append($(`<b class="${usernameColor}">`).text(message.username))
           .append($('<span class="text-muted">').text(dateString))
         )
-        .append($('<span>').text(message.body))
+        .append($('<span>').html(message.body))
       );
   });
 

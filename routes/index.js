@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const showdown = require('showdown');
+const converter = new showdown.Converter();
 
 const Message = require('../models/message');
 
@@ -17,7 +19,8 @@ router.get('/', (req, res, next) => {
     res.render('index', {
       title: 'FSE Chat Room',
       user: req.user,
-      messages: messages,
+      messages,
+      converter,
     });
   });
 });

@@ -13,16 +13,16 @@ block content
                   a.text-muted(href="#", onclick="this.parentNode.submit()") Logout
           tbody#usernames
       .col-9
-        .list-group#messages
+        ul.list-group#messages
           each message in messages
-            .list-group-item
+            li.list-group-item.borderless.py-0
               .d-flex.justify-content-between
                 if message.username == user.username
                   b.text-secondary= message.username
                 else
                   b= message.username
                 span.text-muted= message.createdAt.toLocaleString('en-US')
-              span= message.body
+              span!= converter.makeHtml(message.body)
     nav.navbar.fixed-bottom.mb-3
       .container
         .col-lg-6.col-md-8.col-sm-10.mx-auto
@@ -30,6 +30,6 @@ block content
             span.input-group-addon#username= user.username
             input.form-control#message-body(type=text)
 
+  script(src="//code.jquery.com/jquery-3.2.1.slim.min.js")
   script(src="/socket.io/socket.io.js")
-  script(src="https://code.jquery.com/jquery-3.2.1.slim.min.js")
   script(src="/javascripts/main.js")
