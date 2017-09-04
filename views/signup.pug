@@ -1,33 +1,38 @@
 extend layout
 
 block content
-  script
-    | function setButtonState() {
-    |   let username = document.getElementById('input-username');
-    |   let password = document.getElementById('input-password');
-    |   let button = document.getElementById('signup-button');
-    |   if (username.value == '' || password.value == '') {
-    |     button.disabled = true;
-    |   } else {
-    |     button.disabled = false;
-    |   }
-    | }
-  .row
-    .col-xl-3.col-lg-4.col-md-5.col-sm-6.mx-auto.my-5
-      if alert != ''
-        .alert.alert-danger(role="alert")= alert
-      .card
-        .card-body
-          h2.card-title.text-center Sign Up
-          form.form-login(method="POST")
-            .form-group
-              label(for="input-username") Username
-              input.form-control#input-username(type="text" name="username" autofocus tabindex="1" autocapitalize="off" autocorrect="off" autocomplete="username" onkeyup="setButtonState();")
-            .form-group
-              label(for="input-password") Password
-              input.form-control#input-password(type="password" name="password" tabindex="2" autocomplete="new-password" onkeyup="setButtonState();")
-            .text-center
-              button.btn.btn-primary#signup-button(disabled) Sign up
-          hr
-          p Already have an account?
-            a(href="/login")  Login
+  script.
+    function setButtonState() {
+      let username = document.getElementById('input-username');
+      let password = document.getElementById('input-password');
+      let button = document.getElementById('button-signup');
+      if (username.value == '' || password.value == '') {
+        button.disabled = true;
+      } else {
+        button.disabled = false;
+      }
+    }
+  .container
+    .row
+      .col-lg-4.col-md-5.col-sm-6.mx-auto.my-5
+        if alert != ''
+          .alert.alert-danger(role="alert")= alert
+        .card
+          .card-body
+            h2.card-title.text-center Sign Up
+            form(method="POST")
+              .form-group
+                label(for="input-username") Username
+                if alert == ''
+                  input.form-control#input-username(type="text" name="username" autofocus tabindex="1" autocapitalize="off" autocorrect="off" autocomplete="username" onkeyup="setButtonState();")
+                else
+                  input.form-control#input-username(type="text" name="username" autofocus tabindex="1" autocapitalize="off" autocorrect="off" autocomplete="username" is-invalid onkeyup="setButtonState();")
+                  .invalid-feedback= alert
+              .form-group
+                label(for="input-password") Password
+                input.form-control#input-password(type="password" name="password" tabindex="2" autocomplete="new-password", onkeyup="setButtonState();")
+              .text-center
+                button.btn.btn-primary#button-signup(disabled) Sign up
+            hr
+            p Already have an account?
+              a(href="/login")  Login

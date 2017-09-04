@@ -4,9 +4,16 @@
  * Module dependencies.
  */
 
-let app = require('../app');
-let debug = require('debug')('chatroom:server');
-let http = require('http');
+const {sessionSecret, sessionStore, app} = require('../app');
+const debug = require('debug')('chatroom:server');
+const http = require('http');
+const socketIo = require('socket.io');
+const passportSocketIo = require('passport.socketio');
+
+const Message = require('../models/message');
+const DEFAULT_ROOM = 'general';
+
+let usernames = new Set();
 
 /**
  * Get port from environment and store in Express.
@@ -20,6 +27,7 @@ app.set('port', port);
  */
 
 let server = http.createServer(app);
+let io = socketIo(server);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -88,3 +96,52 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+// Setup socket.io.
+
+io.use(passportSocketIo.authorize({
+  key: 'connect.sid',
+  secret: sessionSecret,
+  store: sessionStore,
+}));
+
+io.on('connection', (socket) => {
+  const user = socket.request.user;
+  if (user) {
+    socket.join(DEFAULT_ROOM, (err) => {
+      if (err) {
+        throw err;
+      }
+      debug(`${user.username} joined room "${DEFAULT_ROOM}".`);
+
+      usernames.add(user.username);
+      io.in(DEFAULT_ROOM).emit('usernames', Array.from(usernames));
+    });
+
+    socket.on('message-body', (body) => {
+      debug(`${user.username} sent "${body}" to room "${DEFAULT_ROOM}".`);
+
+      let message = new Message();
+      message.username = user.username;
+      message.createdAt = new Date();
+      message.body = body;
+
+      message.save((err) => {
+        if (err) {
+          throw err;
+        }
+
+        debug(`Message "${message}" saved.`);
+      });
+
+      io.in(DEFAULT_ROOM).emit('message', message);
+    });
+
+    socket.on('disconnect', () => {
+      debug(`${user.username} left room "${DEFAULT_ROOM}".`);
+
+      usernames.delete(user.username);
+      io.in(DEFAULT_ROOM).emit('usernames', Array.from(usernames));
+    });
+  }
+});

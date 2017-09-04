@@ -1,4 +1,35 @@
 extends layout
 
 block content
-  p Welcome #{user.username}
+  .container
+    .row.py-5.mb-5
+      .col-3.text-light.bg-dark
+        table.table
+          thead
+            tr
+              th.d-flex.justify-content-between.pt-3
+                span Online Users
+                form(action="logout", method="POST")
+                  a.text-muted(href="#", onclick="this.parentNode.submit()") Logout
+          tbody#usernames
+      .col-9
+        .list-group#messages
+          each message in messages
+            .list-group-item
+              .d-flex.justify-content-between
+                if message.username == user.username
+                  b.text-secondary= message.username
+                else
+                  b= message.username
+                span.text-muted= message.createdAt.toLocaleString('en-US')
+              span= message.body
+    nav.navbar.fixed-bottom.mb-3
+      .container
+        .col-lg-6.col-md-8.col-sm-10.mx-auto
+          .input-group
+            span.input-group-addon#username= user.username
+            input.form-control#message-body(type=text)
+
+  script(src="/socket.io/socket.io.js")
+  script(src="https://code.jquery.com/jquery-3.2.1.slim.min.js")
+  script(src="/javascripts/main.js")

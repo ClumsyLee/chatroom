@@ -1,33 +1,34 @@
 extend layout
 
 block content
-  script
-    | function setButtonState() {
-    |   let username = document.getElementById('input-username');
-    |   let password = document.getElementById('input-password');
-    |   let button = document.getElementById('login-button');
-    |   if (username.value == '' || password.value == '') {
-    |     button.disabled = true;
-    |   } else {
-    |     button.disabled = false;
-    |   }
-    | }
-  .row
-    .col-xl-3.col-lg-4.col-md-5.col-sm-6.mx-auto.my-5
-      if alert != ''
-        .alert.alert-danger(role="alert")= alert
-      .card
-        .card-body
-          h2.card-title.text-center Login
-          form.form-login(method="POST")
-            .form-group
-              label(for="input-username") Username
-              input.form-control#input-username(type="text" name="username" autofocus tabindex="1" autocapitalize="off" autocorrect="off" autocomplete="username" onkeyup="setButtonState();")
-            .form-group
-              label(for="input-password") Password
-              input.form-control#input-password(type="password" name="password" tabindex="2" autocomplete="current-password" onkeyup="setButtonState();")
-            .text-center
-              button.btn.btn-primary#login-button(disabled) Login
-          hr
-          p Does not have an account?
-            a(href="/signup")  Sign up
+  script.
+    function setButtonState() {
+      let username = document.getElementById('input-username');
+      let password = document.getElementById('input-password');
+      let button = document.getElementById('button-login');
+      if (username.value == '' || password.value == '') {
+        button.disabled = true;
+      } else {
+        button.disabled = false;
+      }
+    }
+  .container
+    .row.my-5
+      .col-lg-4.col-md-5.col-sm-6.mx-auto
+        if alert != ''
+          .alert.alert-danger(role="alert")= alert
+        .card
+          .card-body
+            h2.card-title.text-center Login
+            form(method="POST")
+              .form-group
+                label(for="input-username") Username
+                input.form-control#input-username(type="text" name="username" autofocus tabindex="1" autocapitalize="off" autocorrect="off" autocomplete="username" onkeyup="setButtonState();")
+              .form-group
+                label(for="input-password") Password
+                input.form-control#input-password(type="password" name="password" tabindex="2" autocomplete="current-password" onkeyup="setButtonState();")
+              .text-center
+                button.btn.btn-primary#button-login(disabled) Login
+            hr
+            p Does not have an account?
+              a(href="/signup")  Sign up

@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
@@ -16,9 +17,12 @@ const User = require('./models/user');
 const index = require('./routes/index');
 const signup = require('./routes/signup');
 const login = require('./routes/login');
+const logout = require('./routes/logout');
 
-
+let app = express();
 mongoose.connect('127.0.0.1');
+let sessionSecret = '17H<U}(S1e=rIN75x.0DO090/8Jf$H}n';
+let sessionStore = new MongoStore({mongooseConnection: mongoose.connection});
 
 // Setup passport.
 passport.serializeUser((user, done) => {
@@ -76,7 +80,6 @@ passport.use('local-login', new LocalStrategy({
 }));
 
 // Setup app.
-let app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -88,7 +91,10 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(session({secret: '17H<U}(S1e=rIN75x.0DO090/8Jf$H}n'}));
+app.use(session({
+  secret: sessionSecret,
+  store: sessionStore,
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -97,6 +103,7 @@ app.use(flash());
 app.use('/', index);
 app.use('/signup', signup);
 app.use('/login', login);
+app.use('/logout', logout);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -116,4 +123,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+module.exports = {sessionSecret, sessionStore, app};

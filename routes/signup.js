@@ -3,10 +3,11 @@ const router = express.Router();
 
 const passport = require('passport');
 
-/* GET login page. */
+/* GET signup page. */
 router.get('/', (req, res, next) => {
   if (req.user) {
     res.redirect('/');
+    return;
   }
 
   res.render('signup', {title: 'Sign Up', alert: req.flash('signup-alert')});
