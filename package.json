@@ -1,27 +1,17 @@
 {
   "name": "chatroom",
-  "version": "1.0.0",
-  "description": "A minimalist chat room.",
-  "main": "app.js",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ThomasLee969/chatroom.git"
-  },
-  "author": "Sihan Li",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ThomasLee969/chatroom/issues"
-  },
-  "homepage": "https://github.com/ThomasLee969/chatroom#readme",
-  "devDependencies": {
-    "eslint": "^4.6.1",
-    "eslint-config-google": "^0.9.1"
+    "start": "node ./bin/www"
   },
   "dependencies": {
-    "express": "^4.15.4",
-    "socket.io": "^2.0.3"
+    "body-parser": "~1.17.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.3",
+    "express": "~4.15.2",
+    "morgan": "~1.8.1",
+    "pug": "~2.0.0-beta11",
+    "serve-favicon": "~2.4.2"
   }
 }
