@@ -1,10 +1,17 @@
 $(() => {
   const socket = io();
+  let body = $('#message-body');
+  autosize(body);
 
-  $('#message-body').on('keypress', (e) => {
+  body.on('keypress', (e) => {
     if (e.keyCode == 13 && !e.shiftKey) {
-      socket.emit('message-body', $('#message-body').val());
-      $('#message-body').val('');
+      if (body.val().trim() != '') {
+        socket.emit('message-body', body.val());
+        body.val('');
+        autosize.update(body);
+      }
+
+      return false;
     }
   });
 

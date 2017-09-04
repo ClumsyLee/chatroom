@@ -28,8 +28,9 @@ block content
         .col-lg-6.col-md-8.col-sm-10.mx-auto
           .input-group
             span.input-group-addon#username= user.username
-            input.form-control#message-body(type=text)
+            textarea.form-control#message-body(rows="1" autofocus tabindex="1")
 
   script(src="//code.jquery.com/jquery-3.2.1.slim.min.js")
+  script(src="//cdnjs.cloudflare.com/ajax/libs/autosize.js/4.0.0/autosize.min.js")
   script(src="/socket.io/socket.io.js")
   script(src="/javascripts/main.js")

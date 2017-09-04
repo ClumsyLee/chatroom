@@ -23,11 +23,7 @@ block content
             form(method="POST")
               .form-group
                 label(for="input-username") Username
-                if alert == ''
-                  input.form-control#input-username(type="text" name="username" autofocus tabindex="1" autocapitalize="off" autocorrect="off" autocomplete="username" onkeyup="setButtonState();")
-                else
-                  input.form-control#input-username(type="text" name="username" autofocus tabindex="1" autocapitalize="off" autocorrect="off" autocomplete="username" is-invalid onkeyup="setButtonState();")
-                  .invalid-feedback= alert
+                input.form-control#input-username(type="text" name="username" autofocus tabindex="1" autocapitalize="off" autocorrect="off" autocomplete="username" onkeyup="setButtonState();")
               .form-group
                 label(for="input-password") Password
                 input.form-control#input-password(type="password" name="password" tabindex="2" autocomplete="new-password", onkeyup="setButtonState();")
