@@ -5,7 +5,11 @@ let passport = require('passport');
 
 /* GET login page. */
 router.get('/', (req, res, next) => {
-  res.render('signup', {title: 'Signup', alert: req.flash('signup-alert')});
+  if (req.user) {
+    res.redirect('/');
+  }
+
+  res.render('signup', {alert: req.flash('signup-alert')});
 });
 
 router.post('/', passport.authenticate('local-signup', {

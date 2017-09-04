@@ -1,22 +1,6 @@
 extend layout
 
 block content
-  .row
-    .col-3.mx-auto.my-5
-      if alert != ''
-        .alert.alert-danger(role="alert")= alert
-      .card
-        .card-body
-          h2.card-title.text-center= title
-          form.form-login(method="POST")
-            .form-group
-              label(for="input-username") Username
-              input.form-control#input-username(type="text" name="username" tabindex="1" onkeyup="setButtonState();")
-            .form-group
-              label(for="input-password") Password
-              input.form-control#input-password(type="password" name="password" onkeyup="setButtonState();")
-            .text-center
-              button.btn.btn-primary#login-button(disabled) Login
   script
     | function setButtonState() {
     |   let username = document.getElementById('input-username');
@@ -28,3 +12,22 @@ block content
     |     button.disabled = false;
     |   }
     | }
+  .row
+    .col-xl-3.col-lg-4.col-md-5.col-sm-6.mx-auto.my-5
+      if alert != ''
+        .alert.alert-danger(role="alert")= alert
+      .card
+        .card-body
+          h2.card-title.text-center Login
+          form.form-login(method="POST")
+            .form-group
+              label(for="input-username") Username
+              input.form-control#input-username(type="text" name="username" autofocus tabindex="1" autocapitalize="off" autocorrect="off" autocomplete="username" onkeyup="setButtonState();")
+            .form-group
+              label(for="input-password") Password
+              input.form-control#input-password(type="password" name="password" tabindex="2" autocomplete="current-password" onkeyup="setButtonState();")
+            .text-center
+              button.btn.btn-primary#login-button(disabled) Login
+          hr
+          p Does not have an account?
+            a(href="/signup")  Sign up

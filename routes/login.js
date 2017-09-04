@@ -5,7 +5,11 @@ let passport = require('passport');
 
 /* GET login page. */
 router.get('/', (req, res, next) => {
-  res.render('login', {title: 'Login', alert: req.flash('login-alert')});
+  if (req.user) {
+    res.redirect('/');
+  }
+
+  res.render('login', {alert: req.flash('login-alert')});
 });
 
 router.post('/', passport.authenticate('local-login', {
