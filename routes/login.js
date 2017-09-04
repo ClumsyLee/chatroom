@@ -9,7 +9,7 @@ router.get('/', (req, res, next) => {
     res.redirect('/');
   }
 
-  res.render('login', {alert: req.flash('login-alert')});
+  res.render('login', {title: 'Login', alert: req.flash('login-alert')});
 });
 
 router.post('/', passport.authenticate('local-login', {

@@ -7,7 +7,7 @@ router.get('/', (req, res, next) => {
     res.redirect('login');
   }
 
-  res.render('index', {user: req.user});
+  res.render('index', {title: 'Chatroom', user: req.user});
 });
 
 module.exports = router;
