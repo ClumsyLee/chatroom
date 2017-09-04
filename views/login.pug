@@ -3,15 +3,28 @@ extend layout
 block content
   .row
     .col-3.mx-auto.my-5
+      if alert != ''
+        .alert.alert-danger(role="alert")= alert
       .card
         .card-body
           h2.card-title.text-center= title
           form.form-login(method="POST")
             .form-group
               label(for="input-username") Username
-              input.form-control(type="text", id="input-username", name="username", tabindex="1")
+              input.form-control#input-username(type="text" name="username" tabindex="1" onkeyup="setButtonState();")
             .form-group
               label(for="input-password") Password
-              input.form-control(type="password", id="input-password", name="password")
+              input.form-control#input-password(type="password" name="password" onkeyup="setButtonState();")
             .text-center
-              button.btn.btn-primary Login
+              button.btn.btn-primary#login-button(disabled) Login
+  script
+    | function setButtonState() {
+    |   let username = document.getElementById('input-username');
+    |   let password = document.getElementById('input-password');
+    |   let button = document.getElementById('login-button');
+    |   if (username.value == '' || password.value == '') {
+    |     button.disabled = true;
+    |   } else {
+    |     button.disabled = false;
+    |   }
+    | }

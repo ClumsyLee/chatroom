@@ -10,6 +10,7 @@ let passport = require('passport');
 let LocalStrategy = require('passport-local').Strategy;
 let mongoose = require('mongoose');
 let crypto = require('crypto');
+var flash    = require('connect-flash');
 
 let User = require('./models/user');
 let index = require('./routes/index');
@@ -19,6 +20,7 @@ let login = require('./routes/login');
 
 mongoose.connect('127.0.0.1');
 
+// Setup passport.
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
@@ -29,35 +31,51 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-passport.use('local-signup', new LocalStrategy((username, password, done) => {
-  let user = new User();
-
-  user.setup(username, password);
-
-  user.save((err) => {
+passport.use('local-signup', new LocalStrategy({
+  passReqToCallback: true,
+},
+(req, username, password, done) => {
+  User.findOne({username: username}, (err, user) => {
     if (err) {
-      throw err;
+      return done(err);
     }
-    return done(null, user);
+    if (user) {
+      return done(null, false,
+                  req.flash('signup-alert', 'The username has been taken.'));
+    } else {
+      let user = new User();
+      user.setup(username, password);
+
+      user.save((err) => {
+        if (err) {
+          throw err;
+        }
+        return done(null, user);
+      });
+    }
   });
 }));
 
-passport.use('local-login', new LocalStrategy((username, password, done) => {
+passport.use('local-login', new LocalStrategy({
+  passReqToCallback: true,
+},
+(req, username, password, done) => {
   User.findOne({username: username}, (err, user) => {
     if (err) {
       return done(err);
     }
     if (!user) {
-      return done(null, false);
+      return done(null, false, req.flash('login-alert', 'Invalid username.'));
     }
     if (!user.verify(password)) {
-      return done(null, false);
+      return done(null, false, req.flash('login-alert', 'Invalid password.'));
     }
 
     return done(null, user);
   });
 }));
 
+// Setup app.
 let app = express();
 
 // view engine setup
@@ -74,6 +92,7 @@ app.use(session({secret: '17H<U}(S1e=rIN75x.0DO090/8Jf$H}n'}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 
 app.use('/', index);
 app.use('/signup', signup);
