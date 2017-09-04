@@ -1,0 +1,17 @@
+extend layout
+
+block content
+  .row
+    .col-3.mx-auto.my-5
+      .card
+        .card-body
+          h2.card-title.text-center= title
+          form.form-login(method="POST")
+            .form-group
+              label(for="input-username") Username
+              input.form-control(type="text", id="input-username", name="username", tabindex="1")
+            .form-group
+              label(for="input-password") Password
+              input.form-control(type="password", id="input-password", name="password")
+            .text-center
+              button.btn.btn-primary Login
